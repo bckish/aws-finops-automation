@@ -25,3 +25,14 @@ the required AWS authentication approach in the workflow for your own account.
 The script prints a Markdown summary and can write it to `reports/cost-report.md`, which is
 ignored by Git because reports may reveal billing data.
 Automated AWS cost reporting and EBS snapshot lifecycle automation.
+
+## Offline resource recommendation lab
+
+The independent local forecasting baseline fits a linear trend to normalized synthetic CPU samples, estimates the next interval and recommends a bounded replica count. It keeps at least one replica, never recommends more than the configured maximum, and limits downscaling to one replica per interval. It only produces recommendations; it does not call AWS or Kubernetes APIs.
+
+```bash
+python3 -W error -m unittest -v test_recommend
+python3 recommend.py fixtures/synthetic-cpu.json
+```
+
+Verified 26 November 2026: all three strict tests passed, and the synthetic rising-demand example forecast 89.8% CPU and recommended three replicas from an initial two. It is not a claim of savings, predictive autoscaling in production, or a substitute for HPA/Karpenter capacity controls. Production integration and cost measurement require approved real telemetry and separate validation.
