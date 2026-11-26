@@ -1,0 +1,14 @@
+name: Offline resource recommendation
+on: [pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python -W error -m unittest -v test_recommend
+      - run: python recommend.py fixtures/synthetic-cpu.json
